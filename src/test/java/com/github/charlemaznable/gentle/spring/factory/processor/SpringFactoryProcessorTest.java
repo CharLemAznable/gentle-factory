@@ -1,6 +1,7 @@
 package com.github.charlemaznable.gentle.spring.factory.processor;
 
-import com.google.common.base.Splitter;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.Compiler;
 import com.google.testing.compile.JavaFileObjects;
@@ -11,14 +12,11 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Properties;
 
 import static com.github.charlemaznable.gentle.spring.factory.processor.SpringFactoryProcessor.MISSING_SERVICES_ERROR;
 import static com.google.testing.compile.CompilationSubject.assertThat;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -37,13 +35,15 @@ public class SpringFactoryProcessorTest {
                         JavaFileObjects.forResource("test/AnotherServiceProvider.java"));
         assertThat(compilation).succeededWithoutWarnings();
 
-        Properties properties = generatedProperties(compilation);
-        assertEquals("test.AnotherServiceProvider", properties.getProperty("test.AnotherService"));
-        List<String> someServices = Splitter.on(",").splitToList(properties.getProperty("test.SomeService"));
+        Multimap<String, String> services = generatedServices(compilation);
+        Collection<String> someServices = services.get("test.SomeService");
         assertEquals(3, someServices.size());
         assertTrue(someServices.contains("test.Enclosing$NestedSomeServiceProvider"));
         assertTrue(someServices.contains("test.SomeServiceProvider1"));
         assertTrue(someServices.contains("test.SomeServiceProvider2"));
+        Collection<String> anotherServices = services.get("test.AnotherService");
+        assertEquals(1, anotherServices.size());
+        assertTrue(anotherServices.contains("test.AnotherServiceProvider"));
     }
 
     @Test
@@ -55,9 +55,13 @@ public class SpringFactoryProcessorTest {
                         JavaFileObjects.forResource("test/MultiServiceProvider.java"));
         assertThat(compilation).succeededWithoutWarnings();
 
-        Properties properties = generatedProperties(compilation);
-        assertEquals("test.MultiServiceProvider", properties.getProperty("test.SomeService"));
-        assertEquals("test.MultiServiceProvider", properties.getProperty("test.AnotherService"));
+        Multimap<String, String> services = generatedServices(compilation);
+        Collection<String> someServices = services.get("test.SomeService");
+        assertEquals(1, someServices.size());
+        assertTrue(someServices.contains("test.MultiServiceProvider"));
+        Collection<String> anotherServices = services.get("test.AnotherService");
+        assertEquals(1, anotherServices.size());
+        assertTrue(anotherServices.contains("test.MultiServiceProvider"));
     }
 
     @Test
@@ -77,8 +81,10 @@ public class SpringFactoryProcessorTest {
                         JavaFileObjects.forResource("test/GenericServiceProvider.java"));
         assertThat(compilation).succeededWithoutWarnings();
 
-        Properties properties = generatedProperties(compilation);
-        assertEquals("test.GenericServiceProvider", properties.getProperty("test.GenericService"));
+        Multimap<String, String> services = generatedServices(compilation);
+        Collection<String> genericServices = services.get("test.GenericService");
+        assertEquals(1, genericServices.size());
+        assertTrue(genericServices.contains("test.GenericServiceProvider"));
     }
 
     @Test
@@ -113,20 +119,20 @@ public class SpringFactoryProcessorTest {
                         JavaFileObjects.forResource("test/EnclosingGeneric.java"));
         assertThat(compilation).succeededWithoutWarnings();
 
-        Properties properties = generatedProperties(compilation);
-        assertEquals("test.EnclosingGeneric$GenericServiceProvider", properties.getProperty("test.GenericService"));
+        Multimap<String, String> services = generatedServices(compilation);
+        Collection<String> genericServices = services.get("test.GenericService");
+        assertEquals(1, genericServices.size());
+        assertTrue(genericServices.contains("test.EnclosingGeneric$GenericServiceProvider"));
     }
 
-    private Properties generatedProperties(Compilation compilation) {
+    private Multimap<String, String> generatedServices(Compilation compilation) {
         Optional<JavaFileObject> javaFileObject = compilation
                 .generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/spring.factories");
-        Properties properties = new Properties();
+        assertTrue(javaFileObject.isPresent());
         try {
-            assertTrue(javaFileObject.isPresent());
-            properties.load(new InputStreamReader(javaFileObject.get().openInputStream(), UTF_8));
+            return FactoriesFile.readServiceFile(javaFileObject.get().openInputStream());
         } catch (IOException e) {
-            // ignored
+            return HashMultimap.create();
         }
-        return properties;
     }
 }
