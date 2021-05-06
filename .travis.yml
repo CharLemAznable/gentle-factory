@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk11
+addons:
+  sonarcloud:
+    organization: "charlemaznable"
+    token:
+      secure: "kGai0ZKdQrq8YKrIc5ew+YgBoYjF8xILQKjJ+328Kx2XIVX54iln+Lzy1nzbb4o5owrpfjoa44jfVMt4lzv6h/oH0TuGMDNR9424SXHC7nr2GZ2kV/2A2NlH2DIomc8JHGPiztn6MvuAU9ctUHTybjNE+VTc65h/RRH4kox4jXYu32MG6nw8fbV8amnHJc3iwy3sgwSLjvneYuXPYA2l09YDQzGtvlQSlSlRPk7SIVUzeCj/43VbYBiQ89Ep4eRG0f6+bSMWN4iuWvMNUzTAVP7JhFTUALCRFCX9CNgcdeqsCxUfyxXJ+kI8ls/bhUzo/S/nwAQBy6D8WZIJNT5agEtlrmW+QPpzEOjjnOw3Vj/18TEqfaw+iOIq+5/5o8yc641GeEIF0x/X4XiVY3d1ugFEOXsiZrQYv4qk3BN3nxzrbCTTvLJI1YPHDFRKEVKqaaVYXPzdTI1kBE9C2VMDkTYzokkdDqb9AGL/IBjIbbtDYLQdWKKKC5fDWQjLkNQynzEz++VexqPB3O4xoaKfm2IIaQ7jbaxgo5FROZcqNtGAJoPxlMytlOSUVP9S03XMUXKiBmNnkqm23Mnt3IDiCUY0i9u/URbRzbyripLG5QBHktcivDx0OxVb42AVmBHQ3p7c+6nAw89nD2G6jEmIaXbJlqdQ6iXcldkOYOPMvs4="
+script:
+  - mvn clean verify sonar:sonar -Dsonar.projectKey=CharLemAznable_gentle-factory
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
