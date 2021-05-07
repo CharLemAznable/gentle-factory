@@ -70,8 +70,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <auto-common.version>1.0</auto-common.version>
-        <guava.version>30.1.1-jre</guava.version>
+        <auto-service.version>1.0</auto-service.version>
 
         <junit-jupiter.version>5.7.1</junit-jupiter.version>
         <compile-testing.version>0.19</compile-testing.version>
@@ -89,14 +88,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.auto</groupId>
-            <artifactId>auto-common</artifactId>
-            <version>${auto-common.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>${auto-service.version}</version>
         </dependency>
 
         <dependency>
@@ -134,7 +128,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin.version}</version>
                 <configuration>
-                    <compilerArgument>-proc:none</compilerArgument>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>

@@ -3,6 +3,7 @@ package com.github.charlemaznable.gentle.spring.factory.processor;
 import com.github.charlemaznable.gentle.spring.factory.SpringFactory;
 import com.google.auto.common.MoreElements;
 import com.google.auto.common.MoreTypes;
+import com.google.auto.service.AutoService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
@@ -10,6 +11,7 @@ import com.google.common.collect.Multimap;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
 import javax.lang.model.SourceVersion;
@@ -39,6 +41,7 @@ import static com.google.auto.common.MoreElements.getAnnotationMirror;
 import static com.google.common.base.Throwables.getStackTraceAsString;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
+@AutoService(Processor.class)
 @SupportedOptions({"debug", "verify"})
 public class SpringFactoryProcessor extends AbstractProcessor {
 
