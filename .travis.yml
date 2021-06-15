@@ -4,8 +4,6 @@ jdk:
 addons:
   sonarcloud:
     organization: "charlemaznable"
-    token:
-      secure: "NPWOOZluIHHo03FgsD6YaOLLYXTVXCVNNb88tFIe0NmxRUCGkn92DVsKk2Ml11blIt1AYA5wKby5X49hEhH9H6765+NwQVjTLxN/AzW2pPMwoW2z+MPLDqcUvNhnHqDj8Jg1hNn/BDO3zJj+nIsVwCNbXjHOjaDUFVKgWATD3s2TP7bdMu1GnZiZ4HyJWlkjuGGq8rR6FJoFEsKjpA6KtzjFBqu8wZSNjb4TdJq5V3CMuXiesZSGMbGa5vzkoqXYjxKyJHNQqkftpLnWw9jQVsIY2CAm9y+1bgtynqlbRUZNCRgE+gctzfoViQn9wg6RNI4VQHiGiaiWkCKZOC78COP69qEqamBtx9kUhgaMSiLjcbCpvZIWR34z+XqTFRDDMVlXkXxHlHsKJ6cqJ6DUf+RlHgB3oLsC/wYZU1I0BnIvQv2AFg/M+KomccPLDEZs5+DjIN33sdrf6Q6aHqav/IAXcKKvRMQ2s+IOB+t3iBwXr4E8m0Ay7TNsPdPKGO8NHeYmgLsYn7jrW50k3GclIhxibSm8sFtgsi7xwLeSy37jGcArCUWRnS9DgFqMvg5w4jUdq545VOLtFeQAK/PUuq8ztsNvGyPpISrWtVMmeR3eXwZb5KMawHosSoTK/+KZ1889tQ5MLyTi7eBjBWCZuQgplxKGLpNCiTT6lYphFRY="
 script:
   - mvn clean verify sonar:sonar -Dsonar.projectKey=CharLemAznable_gentle-factory
 after_success:
