@@ -6,7 +6,7 @@
 
     <groupId>com.github.charlemaznable</groupId>
     <artifactId>gentle-factory</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Gentle Factory</name>
@@ -70,7 +70,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <gentle-factory-annotations.version>0.0.2-SNAPSHOT</gentle-factory-annotations.version>
+        <gentle-factory-annotations.version>0.0.3-SNAPSHOT</gentle-factory-annotations.version>
         <auto-service.version>1.0</auto-service.version>
 
         <junit-jupiter.version>5.7.2</junit-jupiter.version>

@@ -26,7 +26,13 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 
 ##### Maven Dependency
 
-待发布.
+```xml
+<dependency>
+  <groupId>com.github.charlemaznable</groupId>
+  <artifactId>gentle-factory</artifactId>
+  <version>0.0.2</version>
+</dependency>
+```
 
 ##### Maven Dependency SNAPSHOT
 
@@ -34,6 +40,6 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.3-SNAPSHOT</version>
 </dependency>
 ```
