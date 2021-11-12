@@ -30,7 +30,7 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 </dependency>
 ```
 
@@ -40,6 +40,6 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>0.0.3-SNAPSHOT</version>
+  <version>0.0.4-SNAPSHOT</version>
 </dependency>
 ```
