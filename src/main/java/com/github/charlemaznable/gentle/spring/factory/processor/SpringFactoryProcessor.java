@@ -43,7 +43,7 @@ import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 @AutoService(Processor.class)
 @SupportedOptions({"debug", "verify"})
-public class SpringFactoryProcessor extends AbstractProcessor {
+public final class SpringFactoryProcessor extends AbstractProcessor {
 
     @VisibleForTesting
     static final String MISSING_SERVICES_ERROR = "No service interfaces provided for element!";
