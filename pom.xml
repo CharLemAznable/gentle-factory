@@ -24,7 +24,29 @@
         <url>https://github.com/CharLemAznable/gentle-factory</url>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
     <properties>
+        <sonar.projectKey>CharLemAznable_gentle-factory</sonar.projectKey>
+
         <gentle-factory-annotations.version>0.0.6-SNAPSHOT</gentle-factory-annotations.version>
     </properties>
 

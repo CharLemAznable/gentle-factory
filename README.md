@@ -1,7 +1,6 @@
 ### gentle-factory
 
-[![Build Status](https://travis-ci.com/CharLemAznable/gentle-factory.svg?branch=main)](https://travis-ci.org/CharLemAznable/gentle-factory)
-[![codecov](https://codecov.io/gh/CharLemAznable/gentle-factory/branch/main/graph/badge.svg?token=oVtMQpdSPO)](https://codecov.io/gh/CharLemAznable/gentle-factory)
+[![Build](https://github.com/CharLemAznable/gentle-factory/actions/workflows/build.yml/badge.svg)](https://github.com/CharLemAznable/gentle-factory/actions/workflows/build.yml)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.charlemaznable/gentle-factory/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.charlemaznable/gentle-factory/)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 ![GitHub code size](https://img.shields.io/github/languages/code-size/CharLemAznable/gentle-factory)
