@@ -29,7 +29,7 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>2022.0.1</version>
+  <version>2022.0.2</version>
 </dependency>
 ```
 
@@ -39,6 +39,6 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>2022.0.2-SNAPSHOT</version>
+  <version>2023.0.0-SNAPSHOT</version>
 </dependency>
 ```
