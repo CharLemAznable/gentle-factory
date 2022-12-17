@@ -6,7 +6,6 @@ import com.google.auto.common.MoreTypes;
 import com.google.auto.service.AutoService;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -39,7 +38,7 @@ import static com.github.charlemaznable.gentle.spring.factory.processor.Factorie
 import static com.google.auto.common.AnnotationMirrors.getAnnotationValue;
 import static com.google.auto.common.MoreElements.getAnnotationMirror;
 import static com.google.common.base.Throwables.getStackTraceAsString;
-import static com.google.common.collect.ImmutableSet.toImmutableSet;
+import static java.util.stream.Collectors.toUnmodifiableSet;
 
 @AutoService(Processor.class)
 @SupportedOptions({"debug", "verify"})
@@ -51,8 +50,8 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
     private final Multimap<String, String> providers = HashMultimap.create();
 
     @Override
-    public ImmutableSet<String> getSupportedAnnotationTypes() {
-        return ImmutableSet.of(SpringFactory.class.getName());
+    public Set<String> getSupportedAnnotationTypes() {
+        return Set.of(SpringFactory.class.getName());
     }
 
     @Override
@@ -237,23 +236,23 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
      * Returns the contents of a {@code Class[]}-typed "value" field in a given {@code
      * annotationMirror}.
      */
-    private ImmutableSet<DeclaredType> getValueFieldOfClasses(AnnotationMirror annotationMirror) {
+    private Set<DeclaredType> getValueFieldOfClasses(AnnotationMirror annotationMirror) {
         return getAnnotationValue(annotationMirror, "value")
-                .accept(new SimpleAnnotationValueVisitor8<ImmutableSet<DeclaredType>, Void>() {
+                .accept(new SimpleAnnotationValueVisitor8<Set<DeclaredType>, Void>() {
                             @Override
-                            public ImmutableSet<DeclaredType> visitType(TypeMirror typeMirror, Void v) {
+                            public Set<DeclaredType> visitType(TypeMirror typeMirror, Void v) {
                                 // (ronshapiro): class literals may not always be declared types, i.e.
                                 // int.class, int[].class
-                                return ImmutableSet.of(MoreTypes.asDeclared(typeMirror));
+                                return Set.of(MoreTypes.asDeclared(typeMirror));
                             }
 
                             @Override
-                            public ImmutableSet<DeclaredType> visitArray(
+                            public Set<DeclaredType> visitArray(
                                     List<? extends AnnotationValue> values, Void v) {
                                 return values
                                         .stream()
                                         .flatMap(value -> value.accept(this, null).stream())
-                                        .collect(toImmutableSet());
+                                        .collect(toUnmodifiableSet());
                             }
                         },
                         null);
