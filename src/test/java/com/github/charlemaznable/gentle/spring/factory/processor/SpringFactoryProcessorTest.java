@@ -17,8 +17,8 @@ import java.util.Optional;
 
 import static com.github.charlemaznable.gentle.spring.factory.processor.SpringFactoryProcessor.MISSING_SERVICES_ERROR;
 import static com.google.testing.compile.CompilationSubject.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class SpringFactoryProcessorTest {
