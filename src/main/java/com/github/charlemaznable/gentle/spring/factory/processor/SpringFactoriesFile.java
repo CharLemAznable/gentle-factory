@@ -15,11 +15,11 @@ import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-final class FactoriesFile {
+final class SpringFactoriesFile {
 
     public static final String FACTORIES_FILE_PATH = "META-INF/spring.factories";
 
-    private FactoriesFile() { }
+    private SpringFactoriesFile() { }
 
     static Multimap<String, String> readServiceFile(InputStream input) {
         Properties properties = new Properties();

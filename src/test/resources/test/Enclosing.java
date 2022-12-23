@@ -15,9 +15,11 @@
  */
 package test;
 
+import com.github.charlemaznable.gentle.spring.factory.AutoConfigurationImport;
 import com.github.charlemaznable.gentle.spring.factory.SpringFactory;
 
 public class Enclosing {
+  @AutoConfigurationImport
   @SpringFactory(SomeService.class)
   public static class NestedSomeServiceProvider implements SomeService { }
 }

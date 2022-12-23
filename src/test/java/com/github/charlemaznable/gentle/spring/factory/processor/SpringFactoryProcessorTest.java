@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
+import static com.github.charlemaznable.gentle.spring.factory.processor.SpringFactoriesFile.FACTORIES_FILE_PATH;
 import static com.github.charlemaznable.gentle.spring.factory.processor.SpringFactoryProcessor.MISSING_SERVICES_ERROR;
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -127,10 +128,10 @@ public class SpringFactoryProcessorTest {
 
     private Multimap<String, String> generatedServices(Compilation compilation) {
         Optional<JavaFileObject> javaFileObject = compilation
-                .generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/spring.factories");
+                .generatedFile(StandardLocation.CLASS_OUTPUT, FACTORIES_FILE_PATH);
         assertTrue(javaFileObject.isPresent());
         try {
-            return FactoriesFile.readServiceFile(javaFileObject.get().openInputStream());
+            return SpringFactoriesFile.readServiceFile(javaFileObject.get().openInputStream());
         } catch (IOException e) {
             return HashMultimap.create();
         }
