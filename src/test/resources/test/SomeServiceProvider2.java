@@ -15,7 +15,9 @@
  */
 package test;
 
+import com.github.charlemaznable.gentle.spring.factory.AutoConfigurationImport;
 import com.github.charlemaznable.gentle.spring.factory.SpringFactory;
 
+@AutoConfigurationImport
 @SpringFactory(SomeService.class)
 public class SomeServiceProvider2 implements SomeService { }

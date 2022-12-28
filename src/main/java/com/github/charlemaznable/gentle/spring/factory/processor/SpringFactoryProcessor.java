@@ -9,41 +9,35 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
-import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedOptions;
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.SimpleAnnotationValueVisitor8;
 import javax.lang.model.util.Types;
-import javax.tools.Diagnostic.Kind;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.github.charlemaznable.gentle.spring.factory.processor.FactoriesFile.FACTORIES_FILE_PATH;
+import static com.github.charlemaznable.gentle.spring.factory.processor.SpringFactoriesFile.FACTORIES_FILE_PATH;
 import static com.google.auto.common.AnnotationMirrors.getAnnotationValue;
 import static com.google.auto.common.MoreElements.getAnnotationMirror;
-import static com.google.common.base.Throwables.getStackTraceAsString;
 import static com.google.common.collect.ImmutableSet.toImmutableSet;
 
 @AutoService(Processor.class)
 @SupportedOptions({"debug", "verify"})
-public final class SpringFactoryProcessor extends AbstractProcessor {
+public final class SpringFactoryProcessor extends AbstractCommonProcessor {
 
     @VisibleForTesting
     static final String MISSING_SERVICES_ERROR = "No service interfaces provided for element!";
@@ -55,31 +49,7 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
         return ImmutableSet.of(SpringFactory.class.getName());
     }
 
-    @Override
-    public SourceVersion getSupportedSourceVersion() {
-        return SourceVersion.latestSupported();
-    }
-
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        try {
-            processImpl(annotations, roundEnv);
-        } catch (RuntimeException e) {
-            // We don't allow exceptions of any kind to propagate to the compiler
-            fatalError(getStackTraceAsString(e));
-        }
-        return false;
-    }
-
-    private void processImpl(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        if (roundEnv.processingOver()) {
-            generateConfigFiles();
-        } else {
-            processAnnotations(annotations, roundEnv);
-        }
-    }
-
-    private void processAnnotations(Set<? extends TypeElement> annotations,
+    protected void processAnnotations(Set<? extends TypeElement> annotations,
                                     RoundEnvironment roundEnv) {
 
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(SpringFactory.class);
@@ -114,7 +84,7 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
         }
     }
 
-    private void generateConfigFiles() {
+    protected void generateConfigFiles() {
         Filer filer = processingEnv.getFiler();
         log("Working on resource file: " + FACTORIES_FILE_PATH);
         Multimap<String, String> allServices = loadExistsServices(filer);
@@ -134,7 +104,7 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
             FileObject fileObject = filer.createResource(
                     StandardLocation.CLASS_OUTPUT, "", FACTORIES_FILE_PATH);
             try (OutputStream out = fileObject.openOutputStream()) {
-                FactoriesFile.writeServiceFile(allServices, out);
+                SpringFactoriesFile.writeServiceFile(allServices, out);
             }
             log("Wrote to: " + fileObject.toUri());
         } catch (IOException e) {
@@ -152,7 +122,7 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
             FileObject existingFile = filer.getResource(
                     StandardLocation.CLASS_OUTPUT, "", FACTORIES_FILE_PATH);
             log("Looking for existing resource file at " + existingFile.toUri());
-            Multimap<String, String> oldServices = FactoriesFile
+            Multimap<String, String> oldServices = SpringFactoriesFile
                     .readServiceFile(existingFile.openInputStream());
             log("Existing service entries: " + oldServices);
             allServices.putAll(oldServices);
@@ -204,35 +174,6 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
         return false;
     }
 
-    private static boolean rawTypesSuppressed(Element element) {
-        for (; element != null; element = element.getEnclosingElement()) {
-            SuppressWarnings suppress = element.getAnnotation(SuppressWarnings.class);
-            if (suppress != null && Arrays.asList(suppress.value()).contains("rawtypes")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String getBinaryName(TypeElement element) {
-        return getBinaryNameImpl(element, element.getSimpleName().toString());
-    }
-
-    private String getBinaryNameImpl(TypeElement element, String className) {
-        Element enclosingElement = element.getEnclosingElement();
-
-        if (enclosingElement instanceof PackageElement) {
-            PackageElement pkg = MoreElements.asPackage(enclosingElement);
-            if (pkg.isUnnamed()) {
-                return className;
-            }
-            return pkg.getQualifiedName() + "." + className;
-        }
-
-        TypeElement typeElement = MoreElements.asType(enclosingElement);
-        return getBinaryNameImpl(typeElement, typeElement.getSimpleName() + "$" + className);
-    }
-
     /**
      * Returns the contents of a {@code Class[]}-typed "value" field in a given {@code
      * annotationMirror}.
@@ -257,23 +198,5 @@ public final class SpringFactoryProcessor extends AbstractProcessor {
                             }
                         },
                         null);
-    }
-
-    private void log(String msg) {
-        if (processingEnv.getOptions().containsKey("debug")) {
-            processingEnv.getMessager().printMessage(Kind.NOTE, msg);
-        }
-    }
-
-    private void warning(String msg, Element element, AnnotationMirror annotation) {
-        processingEnv.getMessager().printMessage(Kind.WARNING, msg, element, annotation);
-    }
-
-    private void error(String msg, Element element, AnnotationMirror annotation) {
-        processingEnv.getMessager().printMessage(Kind.ERROR, msg, element, annotation);
-    }
-
-    private void fatalError(String msg) {
-        processingEnv.getMessager().printMessage(Kind.ERROR, "FATAL ERROR: " + msg);
     }
 }
