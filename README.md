@@ -39,6 +39,6 @@ A spring.factories generator followed [com.google.auto.service:auto-service](htt
 <dependency>
   <groupId>com.github.charlemaznable</groupId>
   <artifactId>gentle-factory</artifactId>
-  <version>2023.0.5-SNAPSHOT</version>
+  <version>2023.1.0-SNAPSHOT</version>
 </dependency>
 ```
